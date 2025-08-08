@@ -6,7 +6,7 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load pipeline model yang sudah disimpan
-model = joblib.load('Engagement-Prediction/best_model.pkl')
+model = joblib.load('best_model.pkl')
 
 # Home route
 @app.route('/')
@@ -41,3 +41,4 @@ def predict():
 # Jalankan app
 if __name__ == '__main__':
     app.run(debug=True)
+
