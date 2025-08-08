@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediction Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --primary: #4361ee;
+        --primary-light: #4895ef;
+        --secondary: #3f37c9;
+        --success: #4cc9f0;
+        --warning: #f72585;
+        --dark: #1b263b;
+        --light: #f8f9fa;
+        --gray: #adb5bd;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f5f7fa;
+        color: var(--dark);
+        line-height: 1.6;
+        padding: 20px;
+      }
+
+      .result-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+      }
+
+      .prediction-result {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 8px;
+        background-color: #f0f7ff;
+      }
+
+      .prediction-value {
+        font-weight: 600;
+        color: var(--secondary);
+        font-size: 1.3rem;
+      }
+
+      .explanation {
+        margin: 1.5rem 0;
+        padding: 1rem;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        text-align: left;
+      }
+
+      .btn {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        margin-top: 1rem;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+      }
+
+      /* Result-specific styling */
+      .result-yes {
+        background-color: rgba(76, 201, 240, 0.1);
+        border-left: 4px solid var(--success);
+      }
+
+      .result-no {
+        background-color: rgba(247, 37, 133, 0.1);
+        border-left: 4px solid var(--warning);
+      }
+
+      /* Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .result-container {
+        animation: fadeIn 0.5s ease;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .result-container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .result-container {
+          margin: 0.5rem;
+          padding: 1rem;
+        }
+
+        .btn {
+          padding: 10px 20px;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="result-container">
+      <h2>Hasil Prediksi</h2>
+
+      <div class="prediction-result">
+        Model memprediksi bahwa output adalah:
+        <span class="prediction-value">{{ prediction }}</span>
+      </div>
+
+      <div class="explanation {% if prediction == 'Yes' %}result-yes{% elif prediction == 'No' %}result-no{% endif %}">
+        {% if prediction == 'Yes' %}
+        <p><strong>Pelanggan diperkirakan akan memberikan feedback terhadap layanan.</strong></p>
+        <p>Ini menunjukkan pelanggan kemungkinan akan berinteraksi dengan layanan Anda. Pertimbangkan untuk menyiapkan saluran komunikasi yang optimal.</p>
+        {% elif prediction == 'No' %}
+        <p><strong>Pelanggan diperkirakan tidak akan memberikan feedback terhadap layanan.</strong></p>
+        <p>Anda mungkin perlu mempertimbangkan strategi engagement tambahan untuk meningkatkan partisipasi pelanggan.</p>
+        {% else %}
+        <p><strong>Penjelasan tidak tersedia untuk hasil ini.</strong></p>
+        <p>Silakan hubungi tim dukungan untuk interpretasi lebih lanjut.</p>
+        {% endif %}
+      </div>
+
+      <a href="/" class="btn">Kembali ke Halaman Utama</a>
+    </div>
+
+    <script>
+      // Add some interactive elements
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add animation to prediction value
+        const predictionValue = document.querySelector(".prediction-value");
+        if (predictionValue) {
+          predictionValue.style.display = "inline-block";
+          predictionValue.style.animation = "bounce 0.5s ease";
+        }
+
+        // Button hover effect
+        const btn = document.querySelector(".btn");
+        if (btn) {
+          btn.addEventListener("mouseenter", function () {
+            this.style.transform = "translateY(-2px)";
+          });
+          btn.addEventListener("mouseleave", function () {
+            this.style.transform = "translateY(0)";
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

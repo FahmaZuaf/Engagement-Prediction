@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Engagement Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --primary: #4361ee;
+        --primary-light: #4895ef;
+        --secondary: #3f37c9;
+        --dark: #1b263b;
+        --light: #f8f9fa;
+        --success: #4cc9f0;
+        --warning: #f72585;
+        --gray: #adb5bd;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f5f7fa;
+        color: var(--dark);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        text-align: center;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--dark);
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background-color: white;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      }
+
+      input:hover,
+      select:hover {
+        border-color: var(--gray);
+      }
+
+      .btn {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        margin-top: 1rem;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .btn:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .result {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 8px;
+        background-color: #f0f7ff;
+        text-align: center;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .result h3 {
+        color: var(--primary);
+        font-weight: 500;
+      }
+
+      .prediction-value {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        color: var(--secondary);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          margin: 0.5rem;
+          padding: 1rem;
+        }
+
+        input,
+        select,
+        .btn {
+          padding: 10px 12px;
+        }
+      }
+
+      /* Floating labels effect */
+      .input-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-container label {
+        position: absolute;
+        top: -10px;
+        left: 15px;
+        background: white;
+        padding: 0 5px;
+        font-size: 0.8rem;
+        color: var(--primary);
+        z-index: 1;
+      }
+
+      /* Tooltip for form fields */
+      .tooltip {
+        position: relative;
+        display: inline-block;
+        margin-left: 5px;
+        cursor: help;
+      }
+
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: var(--dark);
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.8rem;
+        font-weight: normal;
+      }
+
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Customer Engagement Prediction</h2>
+      <form action="/predict" method="post">
+        <div class="input-container">
+          <label for="Age">Age</label>
+          <input type="number" name="Age" id="Age" required min="18" max="100" />
+        </div>
+
+        <div class="input-container">
+          <label for="Gender">Gender</label>
+          <select name="Gender" id="Gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label for="Marital_Status">Marital Status</label>
+          <select name="Marital_Status" id="Marital_Status">
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label for="Occupation">Occupation</label>
+          <select name="Occupation" id="Occupation">
+            <option value="Student">Student</option>
+            <option value="Employee">Employee</option>
+            <option value="Self-employed">Self-employed</option>
+            <option value="Unemployed">Unemployed</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label for="Monthly_Income">Monthly Income</label>
+          <select name="Monthly_Income" id="Monthly_Income">
+            <option value="No Income">No Income</option>
+            <option value="Below Rs.10000">Below Rs.10000</option>
+            <option value="Rs.10001 - Rs.25000">Rs.10001 - Rs.25000</option>
+            <option value="Rs.25001 - Rs.50000">Rs.25001 - Rs.50000</option>
+            <option value="Rs.50001 - Rs.100000">Rs.50001 - Rs.100000</option>
+            <option value="Above Rs.100000">Above Rs.100000</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label for="Educational_Qualifications">Educational Qualifications</label>
+          <select name="Educational_Qualifications" id="Educational_Qualifications">
+            <option value="School">School</option>
+            <option value="Graduate">Graduate</option>
+            <option value="Post-Graduate">Post-Graduate</option>
+            <option value="PhD">PhD</option>
+          </select>
+        </div>
+
+        <div class="input-container">
+          <label for="Family_size">Family Size</label>
+          <input type="number" name="Family_size" id="Family_size" required min="1" max="15" />
+        </div>
+
+        <div class="input-container">
+          <label for="Feedback">Feedback</label>
+          <select name="Feedback" id="Feedback">
+            <option value="Positive">Positive</option>
+            <option value="Negative">Negative</option>
+            <option value="Neutral">Neutral</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn">Predict Engagement</button>
+      </form>
+
+      {% if prediction %}
+      <div class="result">
+        <h3>Prediction Result</h3>
+        <div class="prediction-value">{{ prediction }}</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <script>
+      // Add some interactive elements
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add focus effects
+        const inputs = document.querySelectorAll("input, select");
+        inputs.forEach((input) => {
+          input.addEventListener("focus", function () {
+            this.parentElement.querySelector("label").style.color = "var(--primary)";
+          });
+
+          input.addEventListener("blur", function () {
+            if (!this.value) {
+              this.parentElement.querySelector("label").style.color = "var(--primary)";
+            }
+          });
+        });
+
+        // Form submission animation
+        const form = document.querySelector("form");
+        if (form) {
+          form.addEventListener("submit", function (e) {
+            const btn = this.querySelector(".btn");
+            btn.disabled = true;
+            btn.innerHTML = "Predicting...";
+            btn.style.backgroundColor = "var(--gray)";
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
